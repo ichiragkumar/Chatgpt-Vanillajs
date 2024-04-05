@@ -90,6 +90,37 @@ const handleSubmit = async (e)=>{
 
   loader(messageDiv)
 
+  // fetch the data frmo the sever
+
+  const response = await fetch("http://localhost:3000", {
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json"
+
+    },
+    body:JSON.stringify({
+      prompt: data.get("prompt")
+    })
+  })
+
+  clearInterval(loadInterval)
+  messageDiv.innerHTML = "";
+
+  if(response.ok){
+    const data = await response.json()
+    const parsedData = data.bot.trim()
+
+    typeText(messageDiv, parsedData)
+  }else{
+    const err = await response.text()
+    messageDiv.innerHTML = "SomeThing Went Wrong..";
+
+    alert(err)
+    
+  }
+
+
+
 }
 
 
